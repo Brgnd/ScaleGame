@@ -1,21 +1,20 @@
 package scalegame
 
-class Location { //class for the base position.
-  private var thing: Option[Item] = None
-  private var base = true
-  
-  
-  def isBase = base 
-  
-}
 
 
-class ScaleLocation(attachedTo: Scale) extends Location {
-  private var thing = new Weight(this) //at first initialize as a weight, changed to scale if needed via changeItem
-  private var base = false // only the base location gets true, can be set via changeToBase
+
+class Location(scale: Option[Scale]) {
+  private var thing: Item = new Weight(this) //at first initialize as a weight, changed to scale if needed via changeItem
+  private var base: Boolean = scale.isEmpty // only the base location gets true
+  
+  def getItem: Item = thing
+  
+  def getScaleAttachedTo: Option[Scale] = scale
+  
+  def isBase: Boolean = base
   
   
-  def getItem() = thing
+  //changes the item to Scale. Weight is discarded.
+  def itemToScale(radius: Int) = thing = new Scale(radius, this)
   
-  override def getScaleAttachedTo = attachedTo
 }
