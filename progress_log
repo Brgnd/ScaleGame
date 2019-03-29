@@ -1,8 +1,8 @@
 16 Mar, 2019 2 commits
-Writing out the basic classes for Scale, weight, location. Also added 
-the projectplan
+Writing out the basic classes for Scale, weight, location. Also added the projectplan
 first commit
 
-29 Mar, 2019 2 commits
-Add CHANGELOG
+
+29 Mar, 2019
+Update progress_log
 Working on the Item class and subclasses. Mostly adding functions.
