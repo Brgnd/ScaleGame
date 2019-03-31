@@ -7,4 +7,6 @@ abstract class Item {
   def getWeight:Int
   
   def changeAmount(howMuch: Int)
+  
+  def changeOwner(player: Player)
 }
