@@ -6,3 +6,6 @@ first commit
 29 Mar, 2019
 Update progress_log
 Working on the Item class and subclasses. Mostly adding functions.
+
+31 Mar, 2019
+Small fixes to existing classes, new classes Brain, Player, ScaleGame
