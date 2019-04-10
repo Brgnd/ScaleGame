@@ -9,3 +9,12 @@ Working on the Item class and subclasses. Mostly adding functions.
 
 31 Mar, 2019
 Small fixes to existing classes, new classes Brain, Player, ScaleGame
+
+10 Apr, 2019
+Lots of changes:
+
+Building the basic graphic UI, adding a basic sprite sheet to use for (it is CC0) now, until better one is made
+ (or the existing one is fixed. Everything is a bit of a mess in the ui department, it will be fixed.
+Went through many iterations of how to build the UI, finally decided on sprite based. 
+Tried doing graphics with swing originally but deemed it a bit work intensive.
+Major work in progress still.  

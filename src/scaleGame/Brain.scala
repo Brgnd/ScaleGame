@@ -1,4 +1,6 @@
-package scalegame
+package scaleGame
+
+
 
 class Brain(game: ScaleGame) {
   

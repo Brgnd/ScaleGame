@@ -1,4 +1,6 @@
-package scalegame
+package scaleGame
+
+
 
 
 class ScaleGame (players: Vector[Player]) {

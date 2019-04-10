@@ -1,4 +1,5 @@
-package scalegame
+package scaleGame
+
 
 
 class Weight(loc: Location) extends Item {

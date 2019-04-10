@@ -1,6 +1,6 @@
 
 
-package scalegame
+package scaleGame
 
 import scala.math._
 
@@ -31,7 +31,8 @@ class Scale(radius: Int, loc: Location) extends Item {
    // calculates the unbalance of the scale, the middle ones index will be zero so it will never affect the balance
   def updateBalance() =  unbalance = slots.map(_.getItem).map(_.getWeight).zipWithIndex.foldLeft(0)
                                               { (total, x) => total + (x._1 * (x._2 - radius)) } 
-                                             
+  def changeAmount(blah: Int) = ???
+  def changeOwner(player: Player) = ???
   //returns current weight
   def getWeight = weight
   

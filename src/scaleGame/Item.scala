@@ -1,4 +1,4 @@
-package scalegame
+package scaleGame
 
 
 abstract class Item {

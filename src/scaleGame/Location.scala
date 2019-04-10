@@ -1,5 +1,4 @@
-package scalegame
-
+package scaleGame
 
 
 
