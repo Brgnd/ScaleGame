@@ -6,24 +6,24 @@ import scala.math._
 
 
 class Scale(radius: Int, loc: Location) extends Item {
-  val slots: Vector[Location] = makeSlots(radius)
+//  val slots: Vector[Location] = makeSlots(radius)
   private var weight: Int = 0 //total weight of the scale
   private var unbalance: Int = 0 //how much the scale is unbalanced, negative for left and positive for right side
   
   def getRadius = radius
   
-  def getItem(num: Int): Item = slots(num + radius).getItem
+  def getItem(num: Int): Item = slots(num + radius).getItem.get
   
   
   // function to initialize the places for putting on weights and new scales
-  def makeSlots(rad: Int): Vector[Location] = { 
-    var locArray = new Array[Location](2*rad + 1)
-    for (i <- 0 to rad * 2) {
-      locArray(i) = new Location(Option(this)) //the middle slot will always be "empty", it just exists for making it
-                                           // to manipulate the slots
-    }
-    locArray.toVector
-  }
+//  def makeSlots(rad: Int): Vector[Location] = { 
+//    var locArray = new Array[Location](2*rad + 1)
+//    for (i <- 0 to rad * 2) {
+//      locArray(i) = new Location(Option(this)) //the middle slot will always be "empty", it just exists for making it
+//                                           // to manipulate the slots
+//    }
+//    locArray.toVector
+//  }
   
   def checkTip():Boolean = abs(unbalance) > radius //checking if the scale is unbalanced
   

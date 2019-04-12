@@ -6,6 +6,7 @@ package scaleGame
 class ScaleGame (players: Vector[Player]) {
   
   private val baseLoc = new Location(None)
+  private val locGrid = List.fill(20)(List.fill(20)(new Location(None)))
    
   private val scales= Array[Scale]()
   
@@ -13,12 +14,15 @@ class ScaleGame (players: Vector[Player]) {
   
   
   // adds a scale to the game
-  def addScale(radius: Int, loc: Location) = scales :+ new Scale(radius, loc)
+  def addScale(x: Int, y: Int, radius: Int) = {
+    val loc = locGrid(x)(y)
+    loc.
+  }
   
   //def addWeight(scale: Scale, loc: Int) = scale.addWeight(loc)
   
   //"basic scale" for adding just radius 3 scales to the game
-  def addscale (loc: Location) = scales :+ new Scale(3, loc)
+  def addscale (x: Int, y: Int) = locGrid(x)(y).
   
   
   //the basic player action, which is adding a weight to a slot on a scale. Might add error handling for clicking on a
@@ -31,7 +35,7 @@ class ScaleGame (players: Vector[Player]) {
       player.addScore(newScore)
     }
   }
-  
+  def getLocGrid = locGrid
   
   def calcScore(player: Player) = player.getScore
 }
