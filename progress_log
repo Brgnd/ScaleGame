@@ -18,3 +18,12 @@ Building the basic graphic UI, adding a basic sprite sheet to use for (it is CC0
 Went through many iterations of how to build the UI, finally decided on sprite based. 
 Tried doing graphics with swing originally but deemed it a bit work intensive.
 Major work in progress still.  
+
+18 Apr, 2019
+Fixing up stuff.
+
+Got the scaleGameApp to draw the sprites. The sprites are in wrong
+places but there is logic to the error. also wrong sprites but that is
+probably just because I cant count. But a milestone that I finally got
+the game to draw stuff. Now I just need to get it to draw the right
+stuff and in correct places :p
