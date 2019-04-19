@@ -5,7 +5,7 @@ import scala.collection.mutable.ArrayBuffer
 
 class ScaleGame (players: Vector[Player]) {
   
-  private val locGrid = Array.tabulate[Location](20, 20){ (x, y) => new Location(x, y) }
+  private val locGrid = Array.tabulate[Location](20, 15){ (x, y) => new Location(x, y) }
    
   private val scales= ArrayBuffer[Scale]()
   
@@ -17,6 +17,7 @@ class ScaleGame (players: Vector[Player]) {
     val loc = locGrid(x)(y)
     loc.itemToScale(radius)
     scales.append(loc.getScale.get)
+    for (i <- -radius to radius) if(i != 0 )locGrid(x+i)(y-2).itemToWeight()
   }
   
   //def addWeight(scale: Scale, loc: Int) = scale.addWeight(loc)

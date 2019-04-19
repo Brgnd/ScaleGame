@@ -27,3 +27,11 @@ places but there is logic to the error. also wrong sprites but that is
 probably just because I cant count. But a milestone that I finally got
 the game to draw stuff. Now I just need to get it to draw the right
 stuff and in correct places :p
+
+19 Apr, 2019
+
+Getting the UI to draw
+
+Finally fixed so that the UI draws the scales and weights correctly using pattern matching. 
+The weight values are going to be numbers on the scales. Next on the list is making the functionality to play, 
+as in playeractions.
