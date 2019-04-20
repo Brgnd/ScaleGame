@@ -1,6 +1,7 @@
 package scaleGame
 
 import scala.collection.mutable.ArrayBuffer
+import scala.math.abs
 
 
 class ScaleGame (players: Vector[Player]) {
@@ -9,15 +10,22 @@ class ScaleGame (players: Vector[Player]) {
    
   private val scales= ArrayBuffer[Scale]()
   
-  val activePlayer = players(0)
+  var activePlayer = players(0)
   
   
-  // adds a scale to the game
+  // adds a scale to the game, also makes the slots for the weights and slots on top of it and gives it to the scale
   def addScale(x: Int, y: Int, radius: Int): Unit = {
     val loc = locGrid(x)(y)
     loc.itemToScale(radius)
-    scales.append(loc.getScale.get)
-    for (i <- -radius to radius) if(i != 0 )locGrid(x+i)(y-2).itemToWeight()
+    val scale = loc.getScale.get
+    scales.append(scale)
+    val locArray = new ArrayBuffer[Location]()
+    for (i <- -radius to radius) if(i != 0 ){
+      val weightLoc = locGrid(x+i)(y-2)
+      weightLoc.itemToWeight(i)
+      locArray.append(weightLoc)
+    }
+    scale.addSlots(locArray.toVector)
   }
   
   //def addWeight(scale: Scale, loc: Int) = scale.addWeight(loc)
@@ -31,14 +39,15 @@ class ScaleGame (players: Vector[Player]) {
   
   //the basic player action, which is adding a weight to a slot on a scale. Might add error handling for clicking on a
   //scale. Still need to add something, forgot what.
-//  def playerAction(loc: Location, player: Player) = {
-//    val scale = loc.getScaleAttachedTo.get
-//    val slot = loc.getNum
-//    if (!loc.isBase) {
-//      var newScore = scale.addWeight(slot, player)
-//      player.addScore(newScore)
-//    }
-//  }
+  def playerAction(loc: Location, weight: Weight) = {
+    val scale = loc.getOnTopOfScale.get
+    scale.addWeight(weight.getDistanceFromCentre)
+    weight.changeOwner(activePlayer)
+    if (activePlayer == players.last) activePlayer = players(0)
+    else activePlayer = players(players.indexOf(activePlayer)+1)
+    
+    
+  }
   def getLocGrid = locGrid
   
   def calcScore(player: Player) = player.getScore

@@ -6,7 +6,7 @@ import scala.math._
 
 
 class Scale(radius: Int, loc: Location) extends Item {
-//  val slots: Vector[Location] = makeSlots(radius)
+  private var slots: Vector[Location] = null
   private var weight: Int = 0 //total weight of the scale
   private var unbalance: Int = 0 //how much the scale is unbalanced, negative for left and positive for right side
   
@@ -56,23 +56,13 @@ class Scale(radius: Int, loc: Location) extends Item {
   // (maybe will add error or smthing else in case of scale)
   // slot will be the spot away from the centre, e.g. -3 means three to the 
   //left of the centre
-//  def addWeight(slot: Int, player:Player): Int = { 
-//    val item = slots(slot + radius).getItem 
-//    if (item.isInstanceOf[Weight]) { 
-//      item.changeAmount(1)
-//      unbalance += slot
-//      if (this.checkTip) {
-//        this.resetWeight()
-//        0
-//      }
-//      else {
-//        item.changeOwner(player)
-//        slot
-//      }
-//    }
-//    0
-//  }
-  
+  def addWeight(change: Int): Unit = {
+    unbalance += change
+    weight += 1
+    if(this.checkTip) this.resetWeight
+      
+  }
+  def addSlots(newSlots: Vector[Location]) = slots = newSlots
   
   
   // changes item on the slot to a scale. Unreversable action, should only be used while initializing the game board

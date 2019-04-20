@@ -35,3 +35,10 @@ Getting the UI to draw
 Finally fixed so that the UI draws the scales and weights correctly using pattern matching. 
 The weight values are going to be numbers on the scales. Next on the list is making the functionality to play, 
 as in playeractions.
+
+20 Apr, 2019
+Finishing basic UI
+
+Finished basic UI and made the mouseover work so the selection can be seen while playing. 
+Started building the mouseclick functionality and building up the game mechanics. 
+Having trouble figuring out how to make the score counters etc.

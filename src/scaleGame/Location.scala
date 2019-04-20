@@ -3,9 +3,9 @@ package scaleGame
 
 
 class Location( x: Int, y: Int) {
-  private var scaleOnLocation: Option[Scale] = None
+  private var onTopOfScale: Option[Scale] = None
   private var thing: Option[Item] = None //initialized as None because makes the graphics easier
-  private var base: Boolean = scaleOnLocation.isEmpty // only the base location gets true
+//  private var base: Boolean = false // only the base location gets true
 //  private var locNum: Int = {
 //    if (base) 0 
 //    else {          
@@ -16,17 +16,22 @@ class Location( x: Int, y: Int) {
   
 //  def getNum = locNum
    
-  def getScale: Option[Scale] = if (thing.get.isInstanceOf[Scale]) thing.asInstanceOf[Option[Scale]]
-                                else None
+  def getScale: Option[Scale] = { 
+    thing match {
+    case Some(scale: Scale) => Option(scale)
+    case _ => None
+    }
+  }
+                                
   
-  def getScaleAttachedTo: Option[Scale] = scaleOnLocation
+  def getOnTopOfScale: Option[Scale] = onTopOfScale
   
-  def isBase: Boolean = base
+//  def isBase: Boolean = base
   
   def getItem: Option[Item] = thing
   //changes the item to Scale. Weight is discarded.
   def itemToScale(radius: Int) = thing = Option(new Scale(radius, this))
   
-  def itemToWeight() = thing = Option(new Weight(this))
+  def itemToWeight(distance: Int) = thing = Option(new Weight(this, distance))
   
 }
