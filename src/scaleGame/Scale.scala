@@ -2,7 +2,7 @@
 
 package scaleGame
 
-import scala.math._
+import scala.math.abs
 
 
 class Scale(radius: Int, loc: Location) extends Item {
@@ -30,9 +30,26 @@ class Scale(radius: Int, loc: Location) extends Item {
   def checkTip():Boolean = abs(unbalance) > radius //checking if the scale is unbalanced
   
   
+  //gives the score of the given player. Recursive function, if the item is scale, it will count the score of the 
+  //scales weight and multiply it by the slot
+  def giveScore(player: Player): Int = {
+    val sum = slots.map(_.getItem).zipWithIndex.foldLeft(0)((total, x) => total + (x._1 match {
+      case Some(weight: Weight) => weight.giveScore(player)
+      case Some(scale: Scale) => scale.giveScore(player) * (abs(x._2 - radius)) 
+      case _ => 0
+    }))
+    sum
+  }
    // calculates the unbalance of the scale.
-  def updateBalance() =  unbalance = slots.map(_.getItem).map(_.get.getWeight).zipWithIndex.foldLeft(0)
-                                         { (total, x) => total + (x._1 * (x._2 - radius)) } 
+  def updateBalance() = {
+    val slotsWeights = slots.map(_.getItem).map(_ match {
+      case Some(item: Item) => item.getWeight
+      case _ => 0
+    })
+    unbalance = slotsWeights.zipWithIndex.foldLeft(0) { (total, x) => total + (x._1 * (x._2 - radius)) }
+    weight = slotsWeights.foldLeft(0)(_ + _)
+  }
+                                          
   def changeAmount(blah: Int) = ???
   def changeOwner(player: Player) = ???
   //returns current weight
@@ -43,25 +60,28 @@ class Scale(radius: Int, loc: Location) extends Item {
    // get all the items that are weights on the scale and reset their amount to zero.
  
   def resetWeight():Unit = {
-    slots.map(_.getItem).foreach(_.get.resetWeight) // ADD SCORE RESET!!!!!!!! (Do a score calculator in a different place)
+    slots.map(_.getItem).foreach(_ match {
+      case Some(item: Item) => item.resetWeight
+      case None => // ADD SCORE RESET!!!!!!!! (Do a score calculator in a different place)
+    })
     
     weight = 0
     unbalance = 0
   }
-//  
-  // adds a single weight if the slot is a weight, if it's a scale, does nothing.
-  // (maybe will add error or smthing else in case of scale)
-  // slot will be the spot away from the centre, e.g. -3 means three to the 
-  //left of the centre
+
+  // adds weight according to the weight added via the ScaleGame class. This only handles the the scale calculations
+  // weight calculations are done 
   def addWeight(change: Int): Boolean = {
     unbalance += change
     weight += 1
     if(this.checkTip) {
       this.resetWeight
-      true
+      false
     }
-    else false
+    else true
   }
+  
+  //function to add slots when initializing the game
   def addSlots(newSlots: Vector[Location]) = slots = newSlots
   
   

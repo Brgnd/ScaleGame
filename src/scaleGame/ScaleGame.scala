@@ -8,10 +8,11 @@ class ScaleGame (players: Vector[Player]) {
   
   private val locGrid = Array.tabulate[Location](20, 15){ (x, y) => new Location(x, y) }
    
+  
+  //array for scales. The first one in the array is always the base scale.
   private val scales= ArrayBuffer[Scale]()
   
   var activePlayer = players(0)
-  
   
   // adds a scale to the game, also makes the slots for the weights and slots on top of it and gives it to the scale
   def addScale(x: Int, y: Int, radius: Int): Unit = {
@@ -20,10 +21,12 @@ class ScaleGame (players: Vector[Player]) {
     val scale = loc.getScale.get
     scales.append(scale)
     val locArray = new ArrayBuffer[Location]()
-    for (i <- -radius to radius) if(i != 0 ){
-      val weightLoc = locGrid(x+i)(y-2)
+    for (i <- -radius to radius) {
+      val weightLoc = locGrid(x+i)(y-2) 
+      if (i != 0 ) {
       weightLoc.itemToWeight(i)
       weightLoc.insertOnTopScale(scale)
+      }
       locArray.append(weightLoc)
     }
     scale.addSlots(locArray.toVector)
@@ -39,30 +42,34 @@ class ScaleGame (players: Vector[Player]) {
   
   
   //the basic player action, location is always going to be a loc with weight, handled in the gameApp
+  //addWeight returns true 
   def playerAction(loc: Location, weight: Weight) = {
     val scale = loc.getOnTopOfScale.get
-    weight.changeAmount(1)
-    if(!scale.addWeight(weight.getDistanceFromCentre)) weight.changeOwner(activePlayer)
-    else {
-      var underScale = scale.getLoc.getOnTopOfScale
-      while (underScale.isDefined) {
-        underScale match {
-        case Some(scale: Scale) =>{
-          scale.updateBalance()
-          if (scale.checkTip()) {
-            scale.resetWeight()
-          }
-          underScale = scale.getLoc.getOnTopOfScale
+    if(scale.addWeight(weight.getDistanceFromCentre)) {
+      weight.changeAmount(1)
+      weight.changeOwner(activePlayer)
+    }
+    var underScale = scale.getLoc.getOnTopOfScale
+    while (underScale.isDefined) {
+      underScale match {
+      case Some(scale: Scale) =>{
+        scale.updateBalance()
+        if (scale.checkTip()) {
+          scale.resetWeight()
         }
-        case _ => 
+        underScale = scale.getLoc.getOnTopOfScale
       }
+      case _ => underScale = None
     }
     }
+    players.foreach(_.calcScore(this))
     if (activePlayer == players.last) activePlayer = players(0)
     else activePlayer = players(players.indexOf(activePlayer)+1)
     
     
   }
+  def getPlayers = players
+  
   def getLocGrid = locGrid
   
   def calcScore(player: Player) = player.getScore

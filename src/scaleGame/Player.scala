@@ -16,5 +16,10 @@ class Player(playerName: String, human: Boolean, color: String) {
   
   def addScore(amount: Int) = score += abs(amount)
   
+  def calcScore(game: ScaleGame): Unit= {
+    val baseScale = game.getScales.head
+    score = baseScale.giveScore(this)
+  }
+  
   def getScore = score
 }

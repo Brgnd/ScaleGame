@@ -15,10 +15,16 @@ class Weight(loc: Location, distanceFromCentre: Int) extends Item {
   
   def changeOwner(player: Player) = {
     owner match {
-      case Some(currentOwner: Player) => if (currentOwner == player) currentOwner.addScore(distanceFromCentre)
+      case Some(currentOwner: Player) => if (currentOwner != player) owner = Some(player) 
       case None => owner = Some(player)
     }
   }
+  
+  
+  def giveScore(player:Player): Int = {
+    if (player == owner.getOrElse(None)) abs(distanceFromCentre) * amount
+    else 0
+  }  
   
   def getDistanceFromCentre: Int = distanceFromCentre
 }

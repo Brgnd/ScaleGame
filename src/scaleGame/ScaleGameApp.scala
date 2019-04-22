@@ -5,7 +5,7 @@ import scala.io.Source
 import javax.imageio.ImageIO
 import java.io.File
 import java.awt.image.BufferedImage
-import java.awt.{Point, Rectangle}
+import java.awt.{Point, Rectangle, Font}
 import scala.swing.event.MouseMoved
 import scala.swing.event.MouseClicked
 
@@ -24,10 +24,6 @@ object ScaleGameApp extends SimpleSwingApplication {
   
   
   val game = new ScaleGame(players)
-  // function for adding the scaleBeams
-  def addScaleBeams(radius: Int,x: Int, y: Int) = {
-    
-  }
   
   // initializing the scales. the second set of scales is always 2 slots up from the previous scale. To make stacking
   // scales possible
@@ -41,6 +37,8 @@ object ScaleGameApp extends SimpleSwingApplication {
   
   def getSprites(imageFile:String) =  {
     val spriteSheet = ImageIO.read(new File(imageFile))
+    
+    //helper method to make the grid.
     def makeSpriteGrid = {
       var grid: List[(Int, Int)] = List()
     
@@ -73,7 +71,8 @@ object ScaleGameApp extends SimpleSwingApplication {
     minimumSize = new Dimension(width, height)
     preferredSize = new Dimension(width, height)
     maximumSize = new Dimension(width, height)
-    
+    var playersString = players.map(_.getName)
+    var fullString = ""
     
     val base = new Component {
       
@@ -125,8 +124,14 @@ object ScaleGameApp extends SimpleSwingApplication {
         } {
           val loc = positions(x)(y)
           val sprite = sprites(spriteMap(x)(y))
+          val scores = players.map(_.getScore)
+          
+          g.setFont(new Font("Serif", Font.BOLD, 36))
           
           g.drawImage(sprite.image, loc.x, loc.y, null) 
+          for (i <- 0 until playersString.length) {
+            g.drawString((playersString(i) + " " + scores(i) + "\n"), 1000, (100+40*i))
+          }
           
           selection.foreach {
             coords =>
@@ -176,7 +181,11 @@ object ScaleGameApp extends SimpleSwingApplication {
       }
     }
     
+    
+    
+    
     contents = base
+     
   }
   
   

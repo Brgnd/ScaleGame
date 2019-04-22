@@ -29,7 +29,6 @@ the game to draw stuff. Now I just need to get it to draw the right
 stuff and in correct places :p
 
 19 Apr, 2019
-
 Getting the UI to draw
 
 Finally fixed so that the UI draws the scales and weights correctly using pattern matching. 
@@ -49,3 +48,12 @@ Building up functionality
 Got the graphics working and the basic adding of weights and resetting working. 
 Some logic errors somewhere what need to be fixed still. 
 Going to make the basic playability working, then going to add player function 
+
+22 Apr, 2019
+It works! (somewhat)
+
+Added scoring system, and added visualisation for the player scores.
+Just gotta do a turn system and it's a somewhat working product. Basically all the algorithms work for the scales
+and the scoring. Tipping works as well, as well as the chain reaction of tipping. Final day tomorrow, hopefully am going 
+to get the minimum stuff done in time and also the project plan.
+
