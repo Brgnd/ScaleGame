@@ -23,6 +23,7 @@ class ScaleGame (players: Vector[Player]) {
     for (i <- -radius to radius) if(i != 0 ){
       val weightLoc = locGrid(x+i)(y-2)
       weightLoc.itemToWeight(i)
+      weightLoc.insertOnTopScale(scale)
       locArray.append(weightLoc)
     }
     scale.addSlots(locArray.toVector)
@@ -37,12 +38,26 @@ class ScaleGame (players: Vector[Player]) {
   }
   
   
-  //the basic player action, which is adding a weight to a slot on a scale. Might add error handling for clicking on a
-  //scale. Still need to add something, forgot what.
+  //the basic player action, location is always going to be a loc with weight, handled in the gameApp
   def playerAction(loc: Location, weight: Weight) = {
     val scale = loc.getOnTopOfScale.get
-    scale.addWeight(weight.getDistanceFromCentre)
-    weight.changeOwner(activePlayer)
+    weight.changeAmount(1)
+    if(!scale.addWeight(weight.getDistanceFromCentre)) weight.changeOwner(activePlayer)
+    else {
+      var underScale = scale.getLoc.getOnTopOfScale
+      while (underScale.isDefined) {
+        underScale match {
+        case Some(scale: Scale) =>{
+          scale.updateBalance()
+          if (scale.checkTip()) {
+            scale.resetWeight()
+          }
+          underScale = scale.getLoc.getOnTopOfScale
+        }
+        case _ => 
+      }
+    }
+    }
     if (activePlayer == players.last) activePlayer = players(0)
     else activePlayer = players(players.indexOf(activePlayer)+1)
     

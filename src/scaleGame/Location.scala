@@ -18,11 +18,13 @@ class Location( x: Int, y: Int) {
    
   def getScale: Option[Scale] = { 
     thing match {
-    case Some(scale: Scale) => Option(scale)
-    case _ => None
+      case Some(scale: Scale) => Option(scale)
+      case _ => None
     }
   }
                                 
+  def insertOnTopScale(scale: Scale) = onTopOfScale = Some(scale)
+  
   
   def getOnTopOfScale: Option[Scale] = onTopOfScale
   

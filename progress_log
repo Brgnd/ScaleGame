@@ -42,3 +42,10 @@ Finishing basic UI
 Finished basic UI and made the mouseover work so the selection can be seen while playing. 
 Started building the mouseclick functionality and building up the game mechanics. 
 Having trouble figuring out how to make the score counters etc.
+
+21 Apr, 2019
+Building up functionality
+
+Got the graphics working and the basic adding of weights and resetting working. 
+Some logic errors somewhere what need to be fixed still. 
+Going to make the basic playability working, then going to add player function 

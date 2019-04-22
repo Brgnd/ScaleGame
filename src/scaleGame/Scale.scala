@@ -12,6 +12,8 @@ class Scale(radius: Int, loc: Location) extends Item {
   
   def getRadius = radius
   
+  def getLoc: Location = loc
+  
 //  def getItem(num: Int): Item = slots(num + radius).getItem.get
   
   
@@ -28,9 +30,9 @@ class Scale(radius: Int, loc: Location) extends Item {
   def checkTip():Boolean = abs(unbalance) > radius //checking if the scale is unbalanced
   
   
-   // calculates the unbalance of the scale, the middle ones index will be zero so it will never affect the balance
-//  def updateBalance() =  unbalance = slots.map(_.getItem).map(_.getWeight).zipWithIndex.foldLeft(0)
-//                                              { (total, x) => total + (x._1 * (x._2 - radius)) } 
+   // calculates the unbalance of the scale.
+  def updateBalance() =  unbalance = slots.map(_.getItem).map(_.get.getWeight).zipWithIndex.foldLeft(0)
+                                         { (total, x) => total + (x._1 * (x._2 - radius)) } 
   def changeAmount(blah: Int) = ???
   def changeOwner(player: Player) = ???
   //returns current weight
@@ -40,27 +42,25 @@ class Scale(radius: Int, loc: Location) extends Item {
    // the slots on the scales in the slots
    // get all the items that are weights on the scale and reset their amount to zero.
  
-  def resetWeight():Unit = ??? 
-//    slots.map(_.getItem).foreach(_.resetWeight) // ADD SCORE RESET!!!!!!!!
-//    
-//    weight = 0
-//    unbalance = 0
-//    if (!loc.isBase) {
-//      val underScale = loc.getScaleAttachedTo.get
-//      underScale.updateBalance
-//      if(underScale.checkTip) underScale.resetWeight()
-//    }
-//  }
+  def resetWeight():Unit = {
+    slots.map(_.getItem).foreach(_.get.resetWeight) // ADD SCORE RESET!!!!!!!! (Do a score calculator in a different place)
+    
+    weight = 0
+    unbalance = 0
+  }
 //  
   // adds a single weight if the slot is a weight, if it's a scale, does nothing.
   // (maybe will add error or smthing else in case of scale)
   // slot will be the spot away from the centre, e.g. -3 means three to the 
   //left of the centre
-  def addWeight(change: Int): Unit = {
+  def addWeight(change: Int): Boolean = {
     unbalance += change
     weight += 1
-    if(this.checkTip) this.resetWeight
-      
+    if(this.checkTip) {
+      this.resetWeight
+      true
+    }
+    else false
   }
   def addSlots(newSlots: Vector[Location]) = slots = newSlots
   

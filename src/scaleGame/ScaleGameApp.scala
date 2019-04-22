@@ -89,20 +89,23 @@ object ScaleGameApp extends SimpleSwingApplication {
       val tileHeight = 44
       val spriteMap = Array.fill(20, 15)(62)
       
-      for {
-          y <- 14 to 0 by -1
-          x <- 0 until 20
-        } {
-          spriteMap(x)(y) = game.getLocGrid(x)(y).getItem match { 
-            case Some(i: Weight) => 52 + i.getWeight
-            case Some(i: Scale) => {
-              for (j <- -i.getRadius to i.getRadius) spriteMap(x+j)(y-1) = 69 
-              19
+      def updateSpriteMap() = {
+        for {
+            y <- 14 to 0 by -1
+            x <- 0 until 20
+          } {
+            spriteMap(x)(y) = game.getLocGrid(x)(y).getItem match { 
+              case Some(i: Weight) => 52 + i.getWeight
+              case Some(i: Scale) => {
+                for (j <- -i.getRadius to i.getRadius) spriteMap(x+j)(y-1) = 69 
+                19
+              }
+              case _ => spriteMap(x)(y)
             }
-            case _ => spriteMap(x)(y)
           }
-        }
+      }
       
+      updateSpriteMap()
       
       val positions = Vector.tabulate(20, 15) { (x: Int, y: Int) =>
         
@@ -151,23 +154,26 @@ object ScaleGameApp extends SimpleSwingApplication {
           
           repaint() 
         }
-        case MouseClicked(c, point, mods, clicks, false) =>
+        case MouseClicked(c, point, mods, clicks, false) => {
           
-          val placeOption = boundaries.find(box => box._1.contains(point)).map(_._2)
-          if (placeOption.isDefined) {
-            val place = placeOption.get
-            val loc = game.getLocGrid(place._1)(place._2)
-            loc.getItem match {
-              case Some(item: Weight) => {
-                game.playerAction(loc, item)
-                  }
-                }
-              
-              
+          boundaries.find(box => box._1.contains(point)).map(_._2) match {
+            case Some(place: (Int, Int)) => {
+               val loc = game.getLocGrid(place._1)(place._2) 
+               loc.getItem match {
+                 case Some(item: Weight) => {
+                   game.playerAction(loc, item)
+                   updateSpriteMap()
+                 }
+                 case _ => 
+               }
             }
+            case _ => 
+              
+              
           }
+          repaint()
+        }
       }
-     
     }
     
     contents = base

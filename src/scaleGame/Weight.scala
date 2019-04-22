@@ -16,6 +16,7 @@ class Weight(loc: Location, distanceFromCentre: Int) extends Item {
   def changeOwner(player: Player) = {
     owner match {
       case Some(currentOwner: Player) => if (currentOwner == player) currentOwner.addScore(distanceFromCentre)
+      case None => owner = Some(player)
     }
   }
   
