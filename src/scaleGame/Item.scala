@@ -1,7 +1,8 @@
 package scaleGame
 
-
+//class for both weights and scales. Used basically for making the score calculations at this point.
 abstract class Item {
+  
   def resetWeight
   
   
@@ -9,7 +10,4 @@ abstract class Item {
   
   def getWeight:Int
   
-  def changeAmount(howMuch: Int)
-  
-  def changeOwner(player: Player)
 }

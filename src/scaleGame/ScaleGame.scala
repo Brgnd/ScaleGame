@@ -12,15 +12,21 @@ class ScaleGame (players: Vector[Player]) {
   //array for scales. The first one in the array is always the base scale.
   private val scales= ArrayBuffer[Scale]()
   
+  
+  //variable for the activeplayer. Will change after playeraction.
   var activePlayer = players(0)
   
   // adds a scale to the game, also makes the slots for the weights and slots on top of it and gives it to the scale
   def addScale(x: Int, y: Int, radius: Int): Unit = {
     val loc = locGrid(x)(y)
     loc.itemToScale(radius)
+    
     val scale = loc.getScale.get
     scales.append(scale)
+    
     val locArray = new ArrayBuffer[Location]()
+    
+    //adds an empty location in the middle for making other functions easier to compute with zipWithIndex etc.
     for (i <- -radius to radius) {
       val weightLoc = locGrid(x+i)(y-2) 
       if (i != 0 ) {
@@ -32,23 +38,20 @@ class ScaleGame (players: Vector[Player]) {
     scale.addSlots(locArray.toVector)
   }
   
-  //def addWeight(scale: Scale, loc: Int) = scale.addWeight(loc)
-  
-  //"basic scale" for adding just radius 3 scales to the game
-  def addScale (x: Int, y: Int) = {
-    locGrid(x)(y).itemToScale(3)
-    scales.append(locGrid(x)(y).getScale.get)
-  }
   
   
   //the basic player action, location is always going to be a loc with weight, handled in the gameApp
-  //addWeight returns true 
+  //addWeight returns true when successfully adding a weight. (probably not the best style of coding)
+  
+  
   def playerAction(loc: Location, weight: Weight) = {
     val scale = loc.getOnTopOfScale.get
     if(scale.addWeight(weight.getDistanceFromCentre)) {
       weight.changeAmount(1)
       weight.changeOwner(activePlayer)
     }
+    
+    //checking the underscale for tipping. (chain reactions possible)
     var underScale = scale.getLoc.getOnTopOfScale
     while (underScale.isDefined) {
       underScale match {
@@ -62,6 +65,8 @@ class ScaleGame (players: Vector[Player]) {
       case _ => underScale = None
     }
     }
+    
+    //updates the score and changes the active player (works with more than 2 players)
     players.foreach(_.calcScore(this))
     if (activePlayer == players.last) activePlayer = players(0)
     else activePlayer = players(players.indexOf(activePlayer)+1)

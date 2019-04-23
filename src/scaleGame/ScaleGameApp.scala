@@ -5,22 +5,26 @@ import scala.io.Source
 import javax.imageio.ImageIO
 import java.io.File
 import java.awt.image.BufferedImage
-import java.awt.{Point, Rectangle, Font}
+import java.awt.{Point, Rectangle, Font, Color}
 import scala.swing.event.MouseMoved
 import scala.swing.event.MouseClicked
 
  
- 
+//The game application.
 object ScaleGameApp extends SimpleSwingApplication {
   
-  // the layout for the scales, will be changed to a file when it is done. Basicly a list of lists of 
+  // the layout for the scales, will be changed to a file when it is done(probably not). Basicly a list of lists of 
   //tuples for each layer. First scale is the basescale so it is always the middle point, and rest of the scales have
   // distance to the middle point of the previous scale.
   private val scales = List(
           List((10, 7)),
           List((-7, 3), (4, 2)))
+  
           
-  val players = Vector(new Player("mikko", true, "red"), new Player("antti", true, "blue"))
+  //the players. Could either make a local file or some UI solutions to get the input for players.
+  //        
+  
+  val players = Vector(new Player("Player 1", true, "red"), new Player("Player 2", true, "blue"))
   
   
   val game = new ScaleGame(players)
@@ -65,7 +69,7 @@ object ScaleGameApp extends SimpleSwingApplication {
     val height = 900
     val sprites = getSprites("letters.png")
     
-    
+    //a green mask with half transparency to show the slot which the mouse is over on.
     val selectionMask = ImageIO.read(new File("selection.png"))
     
     minimumSize = new Dimension(width, height)
@@ -77,8 +81,6 @@ object ScaleGameApp extends SimpleSwingApplication {
     val base = new Component {
       
       
-      // fill up the map with the base sprite, after that put the scale bases and the 
-      
  
       // valittu kohta
       var selection: Option[(Int, Int)] = None
@@ -88,6 +90,10 @@ object ScaleGameApp extends SimpleSwingApplication {
       val tileHeight = 44
       val spriteMap = Array.fill(20, 15)(62)
       
+      
+      //method for updating the spritemap. The weight amounts take the next sprite automatically when a weight is added
+      //going from bottom to the top cause the functions to initialize scales need to be after, cause the
+      //locations will be originally initialized as weights, but changed to scales after.
       def updateSpriteMap() = {
         for {
             y <- 14 to 0 by -1
@@ -106,6 +112,8 @@ object ScaleGameApp extends SimpleSwingApplication {
       
       updateSpriteMap()
       
+      
+      //All the top left corners of every grid
       val positions = Vector.tabulate(20, 15) { (x: Int, y: Int) =>
         
         
@@ -115,7 +123,7 @@ object ScaleGameApp extends SimpleSwingApplication {
       }
       
       
-      
+      //method for drawing the playing field. Also draws players and their score. Updates after every playerAction
       override def paintComponent(g: Graphics2D) = {
         
         for {
@@ -129,8 +137,12 @@ object ScaleGameApp extends SimpleSwingApplication {
           g.setFont(new Font("Serif", Font.BOLD, 36))
           
           g.drawImage(sprite.image, loc.x, loc.y, null) 
-          for (i <- 0 until playersString.length) {
-            g.drawString((playersString(i) + " " + scores(i) + "\n"), 1000, (100+40*i))
+          
+          //for drawing the players and their scores. The active player is drawn in green.
+          for (player <- players) {
+            if (player == game.activePlayer) g.setColor(Color.GREEN)
+            else g.setColor(Color.RED)
+            g.drawString((player.getName + " " + player.getScore.toString + "\n"), 1000, (100+40*players.indexOf(player)))
           }
           
           selection.foreach {
@@ -141,6 +153,8 @@ object ScaleGameApp extends SimpleSwingApplication {
           }
         } 
       }
+      
+      //boundaries of the grid, so the mouseover sprite will be on the correct position
       val boundaries = (
         for {
           y <- 14 to 0 by -1
@@ -149,9 +163,14 @@ object ScaleGameApp extends SimpleSwingApplication {
           sprite = sprites(spriteMap(x)(y))
         } yield new Rectangle(pos.x, pos.y, sprite.width, sprite.height) -> (x, y))
       
+        
+     //needs to follow both mouse moving and clicks.
+        
      listenTo(mouse.moves)
      listenTo(mouse.clicks)
      
+     
+     //what happens when the mouse is moved and when it is clicked.
      reactions += {
         case MouseMoved(c, point, mods) => {
           
@@ -159,6 +178,8 @@ object ScaleGameApp extends SimpleSwingApplication {
           
           repaint() 
         }
+        
+        //the playerAction. Only activates when one clicks on a location with a Weight.
         case MouseClicked(c, point, mods, clicks, false) => {
           
           boundaries.find(box => box._1.contains(point)).map(_._2) match {

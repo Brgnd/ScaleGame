@@ -57,3 +57,11 @@ Just gotta do a turn system and it's a somewhat working product. Basically all t
 and the scoring. Tipping works as well, as well as the chain reaction of tipping. Final day tomorrow, hopefully am going 
 to get the minimum stuff done in time and also the project plan.
 
+23 Apr, 2019
+Cleaning up and adding commentary
+
+Cleaned up some useless stuff and added commentary on the things where the functions weren't clear. Some pondering about 
+stuff that could and should be cleaned up. The game works and if there is stuff to be added it's just extra. 
+The project document(last commit message wrongfully declared it a project plan) will be done first.
+Most of the game functionality is working. Adding extra elements and stuff is easily doable, most of the functions have
+been made for the possibility to aadvance this project forward. Time limitations suck (but work as a motivator).
