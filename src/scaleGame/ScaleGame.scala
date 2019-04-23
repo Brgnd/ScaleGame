@@ -6,11 +6,11 @@ import scala.math.abs
 
 class ScaleGame (players: Vector[Player]) {
   
-  private val locGrid = Array.tabulate[Location](20, 15){ (x, y) => new Location(x, y) }
+  private val locGrid = Array.tabulate[Location](25, 15){ (x, y) => new Location(x, y) }
    
   
   //array for scales. The first one in the array is always the base scale.
-  private val scales= ArrayBuffer[Scale]()
+  private var scales: Vector[Scale] = Vector()
   
   
   //variable for the activeplayer. Will change after playeraction.
@@ -22,7 +22,7 @@ class ScaleGame (players: Vector[Player]) {
     loc.itemToScale(radius)
     
     val scale = loc.getScale.get
-    scales.append(scale)
+    scales = scales :+ scale
     
     val locArray = new ArrayBuffer[Location]()
     

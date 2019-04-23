@@ -1,6 +1,6 @@
 package scaleGame
 
-import scala.math._
+import scala.math.abs
 
 
 //player class. Just needs a playerName as a constructor. human is for making the AI (which is not implemented)

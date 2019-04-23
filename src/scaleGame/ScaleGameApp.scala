@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage
 import java.awt.{Point, Rectangle, Font, Color}
 import scala.swing.event.MouseMoved
 import scala.swing.event.MouseClicked
+import scala.math.abs
 
  
 //The game application.
@@ -44,12 +45,18 @@ object ScaleGameApp extends SimpleSwingApplication {
   val game = new ScaleGame(players)
   
   // initializing the scales. the next set of scales is always 2 slots up from the previous scale. To make stacking
-  // scales possible. Read from a file which has this information
+  // scales possible. Read from a file which has this information checks for the correctness of the basic file.
+  // not all possible error configurations are caught, but most of them.
   for(scale <-scales) {
       if (scale(0) == 0) {
-        game.addScale(10, 14, scale(3))
+        game.addScale(12, 14, scale(3))
       }
       else {
+        if (scale(3) == 0 
+        || (abs(scale(2)) > game.getScales(scale(1)-1).getRadius) 
+        || (scale(1) > game.getScales.length) 
+        || (game.getScales(scale(1)-1).getLoc.getLocX + scale(2) - scale(3)) < 0
+        || (game.getScales(scale(1)-1).getLoc.getLocX + scale(2) + scale(3)) > 24) throw new Exception("Invalid scale.csv file")
         game.addScale((game.getScales(scale(1)-1).getLoc.getLocX + scale(2)), 14-scale(0)*2, scale(3)) 
       }
 
@@ -93,20 +100,18 @@ object ScaleGameApp extends SimpleSwingApplication {
     minimumSize = new Dimension(width, height)
     preferredSize = new Dimension(width, height)
     maximumSize = new Dimension(width, height)
-    var playersString = players.map(_.getName)
-    var fullString = ""
     
     val base = new Component {
       
       
  
-      // valittu kohta
+      // the slot that the mouse is hovering over
       var selection: Option[(Int, Int)] = None
       
       val padding = 100
       val tileWidth = 36
       val tileHeight = 44
-      val spriteMap = Array.fill(20, 15)(62)
+      val spriteMap = Array.fill(25, 15)(62)
       
       
       //method for updating the spritemap. The weight amounts take the next sprite automatically when a weight is added
@@ -115,7 +120,7 @@ object ScaleGameApp extends SimpleSwingApplication {
       def updateSpriteMap() = {
         for {
             y <- 14 to 0 by -1
-            x <- 0 until 20
+            x <- 0 until 25
           } {
             spriteMap(x)(y) = game.getLocGrid(x)(y).getItem match { 
               case Some(i: Weight) => 52 + i.getWeight
@@ -132,7 +137,7 @@ object ScaleGameApp extends SimpleSwingApplication {
       
       
       //All the top left corners of every grid
-      val positions = Vector.tabulate(20, 15) { (x: Int, y: Int) =>
+      val positions = Vector.tabulate(25, 15) { (x: Int, y: Int) =>
         
         
         val xc = padding + x * tileWidth
@@ -146,7 +151,7 @@ object ScaleGameApp extends SimpleSwingApplication {
         
         for {
           y <- 14 to 0 by -1
-          x <- 0 until 20
+          x <- 0 until 25
         } {
           val loc = positions(x)(y)
           val sprite = sprites(spriteMap(x)(y))
@@ -176,7 +181,7 @@ object ScaleGameApp extends SimpleSwingApplication {
       val boundaries = (
         for {
           y <- 14 to 0 by -1
-          x <- 0 until 20
+          x <- 0 until 25
           pos = positions(x)(y)
           sprite = sprites(spriteMap(x)(y))
         } yield new Rectangle(pos.x, pos.y, sprite.width, sprite.height) -> (x, y))

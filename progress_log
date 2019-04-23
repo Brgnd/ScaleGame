@@ -19,6 +19,14 @@ Went through many iterations of how to build the UI, finally decided on sprite b
 Tried doing graphics with swing originally but deemed it a bit work intensive.
 Major work in progress still.  
 
+12 Apr, 2019
+Changes to the UI building:
+
+Noticed that the way I thought to make the ui wasn't clever, so I have
+to rebuild all the location and game classes. Going to take a while to
+fix stuff. Mid-fixing commit, going to take a break. A lot to work on, I
+wish I had started doing this in an other way.
+
 18 Apr, 2019
 Fixing up stuff.
 
@@ -70,3 +78,8 @@ been made for the possibility to aadvance this project forward. Time limitations
 Added support for csv file reading
 
 Implemented a way to read a way to put in scales with a csv file.
+
+23 Apr, 2019 (actually 24th, but just after midnight.)
+Final commit
+
+Small fixes to the game. Added the project document. This is it.

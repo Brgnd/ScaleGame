@@ -1,4 +1,4 @@
-ScaleOn,0,0,0,7
-ScaleOn,1,1,-7,3
-ScaleOn,1,1,4,2
-ScaleOn,2,2,2,4
+Base,0,0,0,5
+ScaleOn,1,1,-3,2
+ScaleOn,1,1,4,3
+ScaleOn,2,3,-2,2
