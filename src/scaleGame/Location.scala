@@ -34,4 +34,6 @@ class Location( x: Int, y: Int) {
   //changes item to weight. Needs the distance from the center to calculate stuff easier.
   def itemToWeight(distance: Int) = thing = Option(new Weight(this, distance))
   
+  def getLocX = x
+  
 }

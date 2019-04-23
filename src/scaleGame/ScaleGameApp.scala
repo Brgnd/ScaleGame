@@ -1,5 +1,6 @@
 package scaleGame
 
+
 import swing._
 import scala.io.Source
 import javax.imageio.ImageIO
@@ -16,9 +17,22 @@ object ScaleGameApp extends SimpleSwingApplication {
   // the layout for the scales, will be changed to a file when it is done(probably not). Basicly a list of lists of 
   //tuples for each layer. First scale is the basescale so it is always the middle point, and rest of the scales have
   // distance to the middle point of the previous scale.
-  private val scales = List(
-          List((10, 7)),
-          List((-7, 3), (4, 2)))
+  
+  //function to read a csv file. first thing is string, which has doesn't do anything. Then there is the info like this:
+  // 0: Level of scale (0 is bottom, 1 is level up from it)
+  // 1: What scale is it on (0 is the first scale inserted to the game and so on)
+  // 2: Offset of the scale, aka which slot of the scale under the new scale is on
+  // 3: the radius of the scale.
+  // this is a bad implementation. Should be better.
+  def getScales = {
+    val scaleFile = Source.fromFile("scales.csv").getLines()
+    for {
+      line <- scaleFile.toList
+      items = line.split(",")
+      scaleInfo = items.takeRight(4).map(_.toInt)
+    } yield List(scaleInfo(0), scaleInfo(1), scaleInfo(2), scaleInfo(3))
+  }
+  private val scales = getScales
   
           
   //the players. Could either make a local file or some UI solutions to get the input for players.
@@ -29,13 +43,17 @@ object ScaleGameApp extends SimpleSwingApplication {
   
   val game = new ScaleGame(players)
   
-  // initializing the scales. the second set of scales is always 2 slots up from the previous scale. To make stacking
-  // scales possible
-  for(i <- 0 until scales.length)
-    for(scale<- scales(i)) 
-      if (i == 0) game.addScale(scale._1, 14, scale._2)
-      else game.addScale(scales(i-i)(0)._1 + scale._1,14- i*2 ,  scale._2)
-          
+  // initializing the scales. the next set of scales is always 2 slots up from the previous scale. To make stacking
+  // scales possible. Read from a file which has this information
+  for(scale <-scales) {
+      if (scale(0) == 0) {
+        game.addScale(10, 14, scale(3))
+      }
+      else {
+        game.addScale((game.getScales(scale(1)-1).getLoc.getLocX + scale(2)), 14-scale(0)*2, scale(3)) 
+      }
+
+  }
   // getting the sprites from the png file
   case class Sprite(id: String, image: BufferedImage, width: Int, height: Int)
   

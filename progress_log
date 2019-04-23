@@ -65,3 +65,8 @@ stuff that could and should be cleaned up. The game works and if there is stuff 
 The project document(last commit message wrongfully declared it a project plan) will be done first.
 Most of the game functionality is working. Adding extra elements and stuff is easily doable, most of the functions have
 been made for the possibility to aadvance this project forward. Time limitations suck (but work as a motivator).
+
+23 Apr, 2019
+Added support for csv file reading
+
+Implemented a way to read a way to put in scales with a csv file.
